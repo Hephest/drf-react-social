@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
+    'django_nose',
+
     'blog',
 ]
 
@@ -51,6 +53,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--cover-erase',
+    '--cover-package=blog',
 ]
 
 REST_FRAMEWORK = {
