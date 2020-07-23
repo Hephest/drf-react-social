@@ -1,7 +1,8 @@
 from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import (TokenObtainPairView,
-                                            TokenRefreshView)
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView, TokenRefreshView,
+)
 
 from .views import PostViewSet, UserCreateAPIView
 
