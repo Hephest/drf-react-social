@@ -62,6 +62,10 @@ NOSE_ARGS = [
     '--cover-package=blog',
 ]
 
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT', ),
+}
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',

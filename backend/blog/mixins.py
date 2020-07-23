@@ -2,7 +2,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from . import utils
-from .serializers import PostSerializer
+from .serializers import FanSerializer
 
 
 class LikedMixin:
@@ -22,5 +22,5 @@ class LikedMixin:
     def fans(self, request, pk=None):
         obj = self.get_object()
         fans = utils.get_fans(obj)
-        serializer = PostSerializer(fans, many=True)
+        serializer = FanSerializer(fans, many=True)
         return Response(serializer.data)
