@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
-from rest_framework import viewsets, generics, status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework import generics, status, viewsets
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from .mixins import LikedMixin

@@ -72,10 +72,10 @@ class UserCreateAPITest(APITestCase):
         Ensure user is not created without username.
         """
         data = {
-                'username': '',
-                'email': 'foobarbaz@example.com',
-                'password': 'foobar'
-                }
+            'username': '',
+            'email': 'foobarbaz@example.com',
+            'password': 'foobar'
+        }
 
         response = self.client.post(self.create_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -87,10 +87,10 @@ class UserCreateAPITest(APITestCase):
         Ensure user is not created, when it already exists.
         """
         data = {
-                'username': 'testuser',
-                'email': 'user@example.com',
-                'password': 'testuser'
-                }
+            'username': 'testuser',
+            'email': 'user@example.com',
+            'password': 'testuser'
+        }
 
         response = self.client.post(self.create_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -119,7 +119,7 @@ class UserCreateAPITest(APITestCase):
         data = {
             'username': 'foobarbaz',
             'email': 'testing',
-            'passsword': 'foobarbaz'
+            'password': 'foobarbaz'
         }
 
         response = self.client.post(self.create_url, data, format='json')
