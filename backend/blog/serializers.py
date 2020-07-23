@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from . import utils
-from .models import Post
+from .models import Post, Like
 
 User = get_user_model()
 
@@ -67,10 +68,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            validated_data['username'],
-            validated_data['email'],
-            validated_data['password']
-        )
+        user = super().create(validated_data)
+        user.set_password(validated_data['password'])
         user.save()
         return user
