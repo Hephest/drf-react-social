@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+    db:
+        image: postgres
+        environment:
+            - POSTGRES_DB=${DB_NAME}
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+    web:
+        build: ./backend
+        command: python backend/manage.py runserver 0.0.0.0:8000
+        volumes:
+            - .:/backend
+        env_file: .env
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db

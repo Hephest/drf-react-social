@@ -42,19 +42,19 @@ Example report:
 ### Project
 - [ ] Documentation
 - [ ] `Docker` and `docker-compose` setup
-    - [ ] `backend` container
+    - [x] ~~backend container~~
     - [ ] `frontend` container
-    - [ ] `.env` fle support
+    - [x] ~~.env fle support~~
 
 ### Backend
 - [x] ~~Nose test runner~~
 - [x] ~~Coverage report~~
-- [ ] `isort` and `flake8` support
+- [x] ~~isort and flake8 support~~
 - [x] ~~Testcases for all API parts~~
     - [x] ~~User sign up~~
     - [x] ~~JWT tokens~~
     - [x] ~~Posts & likes~~
-- [ ] `PostgreSQL`
+- [x] ~~PostgreSQL~~
 
 ### Frontend
 - [ ] `React` project folder
