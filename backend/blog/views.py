@@ -4,8 +4,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from .mixins import LikedMixin
-from .models import Post
-from .serializers import PostSerializer, UserSerializer
+from .models import Post, Like
+from .serializers import PostSerializer, UserSerializer, LikeSerializer
 
 User = get_user_model()
 
@@ -32,3 +32,9 @@ class UserCreateAPIView(generics.CreateAPIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AnalyticsListAPIView(generics.ListAPIView):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+    permission_classes = (AllowAny,)

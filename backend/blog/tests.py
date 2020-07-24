@@ -215,7 +215,7 @@ class PostsAPITest(APITestCase):
         """
         response = self.client.get(reverse('posts-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data['count'], 2)
         self.assertEqual(Post.objects.count(), 2)
 
     def test_unauthorized_create_post(self):
@@ -279,7 +279,7 @@ class PostsAPITest(APITestCase):
 
         response = self.client.get(reverse('posts-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data['count'], 2)
 
     def test_authorized_create_post(self):
         """
