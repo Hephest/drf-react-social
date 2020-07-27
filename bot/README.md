@@ -11,6 +11,7 @@ CLI tool for `drf-react-social` project testing purposes.
 - [Usage](#usage)
     - [Parameters](#parameters)
     - [CLI](#parameters)
+- [Release History](#release-history)
 
 ## Installation
 
@@ -58,4 +59,7 @@ Automation bot provides 2 ways to work with:
 
     Interactive mode provide user-friendly command-line interface for user input.
     
-## Release
+## Release History
+
+- 0.1.0
+    - First release
