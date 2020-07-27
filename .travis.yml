@@ -12,4 +12,4 @@ script:
   - docker-compose build
   - docker-compose run web python backend/manage.py makemigrations blog
   - docker-compose run web python backend/manage.py migrate
-  - docker-compose run web python backend/manage.py test
+  - docker-compose run web python backend/manage.py test blog.tests

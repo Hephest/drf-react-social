@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APITransactionTestCase
 
 from .models import Post
 
@@ -9,13 +9,14 @@ User = get_user_model()
 
 
 class UserCreateAPITest(APITestCase):
-    def setUp(self):
-        self.test_user = User.objects.create_user(
+    @classmethod
+    def setUpTestData(cls):
+        test_user = User.objects.create_user(
             'testuser',
             'test@example.com',
             'testpassword'
         )
-        self.create_url = reverse('users-create')
+        test_user.save()
 
     def test_create_user(self):
         """
@@ -27,7 +28,7 @@ class UserCreateAPITest(APITestCase):
             'password': 'somepassword'
         }
 
-        response = self.client.post(self.create_url, data, format='json')
+        response = self.client.post(reverse('users-create'), data, format='json')
 
         self.assertEqual(User.objects.count(), 2)
 
@@ -47,7 +48,7 @@ class UserCreateAPITest(APITestCase):
             'password': 'foo'
         }
 
-        response = self.client.post(self.create_url, data, format='json')
+        response = self.client.post(reverse('users-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(len(response.data['password']), 1)
@@ -62,7 +63,7 @@ class UserCreateAPITest(APITestCase):
             'password': ''
         }
 
-        response = self.client.post(self.create_url, data, format='json')
+        response = self.client.post(reverse('users-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(len(response.data['password']), 1)
@@ -77,7 +78,7 @@ class UserCreateAPITest(APITestCase):
             'password': 'foobar'
         }
 
-        response = self.client.post(self.create_url, data, format='json')
+        response = self.client.post(reverse('users-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(len(response.data['username']), 1)
@@ -92,7 +93,7 @@ class UserCreateAPITest(APITestCase):
             'password': 'testuser'
         }
 
-        response = self.client.post(self.create_url, data, format='json')
+        response = self.client.post(reverse('users-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(len(response.data['username']), 1)
@@ -107,7 +108,7 @@ class UserCreateAPITest(APITestCase):
             'password': 'testuser'
         }
 
-        response = self.client.post(self.create_url, data, format='json')
+        response = self.client.post(reverse('users-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(len(response.data['email']), 1)
@@ -122,7 +123,7 @@ class UserCreateAPITest(APITestCase):
             'password': 'foobarbaz'
         }
 
-        response = self.client.post(self.create_url, data, format='json')
+        response = self.client.post(reverse('users-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(len(response.data['email']), 1)
@@ -137,19 +138,21 @@ class UserCreateAPITest(APITestCase):
             'password': 'foobarbaz'
         }
 
-        response = self.client.post(self.create_url, data, format='json')
+        response = self.client.post(reverse('users-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(len(response.data['email']), 1)
 
 
 class JWTAPITest(APITestCase):
-    def setUp(self):
-        self.test_user = User.objects.create_user(
+    @classmethod
+    def setUpTestData(cls):
+        test_user = User.objects.create_user(
             'testuser',
             'test@example.com',
             'testpassword'
         )
+        test_user.save()
 
     def test_jwt_workflow(self):
         """
@@ -186,28 +189,35 @@ class JWTAPITest(APITestCase):
         self.assertTrue('refresh' in response.data)
 
 
-class PostsAPITest(APITestCase):
-    def setUp(self):
-        self.test_user = User.objects.create_user(
+class PostsAPITest(APITransactionTestCase):
+    reset_sequences = True
+
+    @classmethod
+    def setUp(cls):
+        test_user = User.objects.create_user(
             'testuser',
             'test@example.com',
             'testpassword'
         )
-        self.test_user2 = User.objects.create_user(
+        test_user.save()
+        test_user2 = User.objects.create_user(
             'testuser2',
             'test2@example.com',
             'testpassword32'
         )
-        self.post1 = Post.objects.create(
+        test_user2.save()
+        post1 = Post.objects.create(
             title='First post',
-            owner=self.test_user,
+            owner=test_user,
             content='First ever created post!'
         )
-        self.post2 = Post.objects.create(
+        post1.save()
+        post2 = Post.objects.create(
             title='Second post',
-            owner=self.test_user,
+            owner=test_user,
             content='Another post.'
         )
+        post2.save()
 
     def test_unauthorized_get_posts(self):
         """
@@ -283,7 +293,7 @@ class PostsAPITest(APITestCase):
 
     def test_authorized_create_post(self):
         """
-        Ensure authorized user can create post
+        Ensure authorized user can create post.
         """
         response = self.client.post(
             reverse('token_obtain_pair'),
@@ -339,7 +349,6 @@ class PostsAPITest(APITestCase):
             },
             format='json'
         )
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], 'Test post +1')
         self.assertEqual(response.data['content'], 'New')
