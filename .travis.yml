@@ -1,0 +1,12 @@
+language: python
+python:
+  - 3.8
+services:
+  - docker
+  - postgresql
+install:
+  - pip install -r backend/requirements.txt
+script:
+  - docker-compose build
+  - docker-compose run web python backend/manage.py migrate
+  - docker-compose run web python backend/manage.py test
