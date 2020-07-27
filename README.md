@@ -2,6 +2,8 @@
 
 Social network for posting, based on DRF and React.
 
+[![Build Status](https://travis-ci.org/Hephest/drf-react-social.svg?branch=master)](https://travis-ci.org/Hephest/drf-react-social)
+
 ## Testing
 
 Project support `Nose` test runner (`django-nose`) and coverage reports (`coverage`).
