@@ -3,6 +3,7 @@
 Social network for posting, based on DRF and React.
 
 [![Build Status](https://travis-ci.org/Hephest/drf-react-social.svg?branch=master)](https://travis-ci.org/Hephest/drf-react-social)
+![GitHub last commit](https://img.shields.io/github/last-commit/Hephest/drf-react-social)
 
 ## Testing
 
