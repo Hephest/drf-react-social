@@ -13,7 +13,7 @@ urlpatterns = router.urls
 
 urlpatterns += [
     url(r'^users/register/', UserCreateAPIView.as_view(), name='users-create'),
-    url(r'^token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    url(r'^token/obtain/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     url(r'^token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     url(r'^analytics/', AnalyticsListAPIView.as_view(), name='analytics')
 ]
