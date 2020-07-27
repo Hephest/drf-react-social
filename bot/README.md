@@ -10,6 +10,7 @@ CLI tool for `drf-react-social` project testing purposes.
 - [Installation](#installation)
 - [Usage](#usage)
     - [Parameters](#parameters)
+    - [Configuration file template](#configuration-file-template)
     - [CLI](#parameters)
 - [Release History](#release-history)
 
@@ -45,6 +46,20 @@ Run automation bot:
 | `max_posts_per_user` | `int` | Number of posts, which could be created by single user
 | `max_likes_per_user` | `int` | Number of posts, which could be liked by user 
 | `filename` | `str` | Path to JSON file, where fake users data is stored |
+
+### Configuration file template
+
+> `config.ini` required only in **manual mode**
+
+```ini
+[constants]
+number_of_users = 20
+max_posts_per_user = 35
+max_likes_per_user = 40
+
+[storage]
+filename = users.json
+```
 
 ### CLI
 
