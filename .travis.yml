@@ -10,8 +10,8 @@ before_script:
   - echo 'DJANGO_SECRET_KEY = '$DJANGO_SECRET_KEY >> .env
   - echo 'DB_NAME = '$DB_NAME >> .env
   - echo 'DB_USER = '$DB_USER >> .env
-  - echo 'DB_PASSWORD = '$DB_PASSWORD >. .env
-  - echo 'DB_HOST = '$DB_HOST >. .env
+  - echo 'DB_PASSWORD = '$DB_PASSWORD >> .env
+  - echo 'DB_HOST = '$DB_HOST >> .env
 script:
   - docker-compose build
   - docker-compose run web python backend/manage.py migrate
