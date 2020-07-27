@@ -13,5 +13,3 @@ script:
   - docker-compose run web python backend/manage.py makemigrations blog
   - docker-compose run web python backend/manage.py migrate
   - docker-compose run web python backend/manage.py test
-after_success:
-  - codecov
