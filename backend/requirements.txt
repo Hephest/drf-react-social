@@ -14,5 +14,5 @@ isort==5.2.0
 
 # Testing
 django-nose==1.4.6
-coverage==5.2
+coverage==5.2.1
 codecov==2.1.8
