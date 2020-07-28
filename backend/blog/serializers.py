@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from . import utils
-from .models import Post, Like
+from .models import Post
 
 User = get_user_model()
 
@@ -71,23 +71,3 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
-
-
-class LikeSerializer(serializers.ModelSerializer):
-    date = serializers.DateTimeField(source='created_at', format='%Y-%m-%d', read_only=True)
-    total_likes = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = Like
-        fields = (
-            'date',
-            'total_likes'
-        )
-
-    def get_total_likes(self, obj):
-        return (Like
-                .objects
-                .filter(created_at__date=obj.created_at)
-                .order_by('created_at')
-                .distinct('created_at')
-                .count())

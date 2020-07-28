@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
@@ -481,3 +483,88 @@ class PostsAPITest(APITransactionTestCase):
         response = self.client.get(reverse('posts-detail', args='2') + 'fans/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
+
+
+class AnalyticsAPITest(APITestCase):
+    @classmethod
+    def setUp(cls):
+        test_user = User.objects.create_user(
+            'testuser',
+            'test@example.com',
+            'testpassword'
+        )
+        test_user.save()
+        test_user2 = User.objects.create_user(
+            'testuser2',
+            'test2@example.com',
+            'testpassword32'
+        )
+        test_user2.save()
+
+    def test_analytics_workflow_for_no_likes(self):
+        """
+        Ensure analytics endpoint return nothing if data don't provided.
+        """
+        response = self.client.get(reverse('analytics'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertTrue('status' in response.data)
+        self.assertEqual(response.data['status'], 'There is no data available for know.')
+
+    def test_analytics_workflow_for_likes(self):
+        """
+        Ensure analytics endpoint return data.
+        """
+
+        # First user create post id=1 and post id=2
+        response = self.client.post(
+            reverse('token_obtain_pair'),
+            data={
+                'username': 'testuser',
+                'password': 'testpassword'
+            },
+            format='json'
+        )
+        token = response.data['access']
+        self.client.credentials(HTTP_AUTHORIZATION='JWT ' + token)
+
+        response = self.client.post(
+            reverse('posts-list'),
+            data={'title': 'Test post', 'content': 'Testing content things'},
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.client.post(
+            reverse('posts-list'),
+            data={'title': 'Test post 2', 'content': 'Another testing content.'},
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # First user like post id=2
+        response = self.client.post(reverse('posts-detail', args='2') + 'like/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Second user like posts id=1 and id=2
+        response = self.client.post(
+            reverse('token_obtain_pair'),
+            data={
+                'username': 'testuser2',
+                'password': 'testpassword32'
+            },
+            format='json'
+        )
+        token = response.data['access']
+        self.client.credentials(HTTP_AUTHORIZATION='JWT ' + token)
+
+        response = self.client.post(reverse('posts-detail', args='1') + 'like/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.post(reverse('posts-detail', args='2') + 'like/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Check analytics
+        response = self.client.get(reverse('analytics'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0]['date'], datetime.date.today())
+        self.assertEqual(response.data[0]['total_likes'], 3)

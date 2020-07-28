@@ -1,11 +1,13 @@
 from django.contrib.auth import get_user_model
+from django.db.models import Count
 from rest_framework import generics, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .mixins import LikedMixin
 from .models import Post, Like
-from .serializers import PostSerializer, UserSerializer, LikeSerializer
+from .serializers import PostSerializer, UserSerializer
 
 User = get_user_model()
 
@@ -34,7 +36,10 @@ class UserCreateAPIView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AnalyticsListAPIView(generics.ListAPIView):
-    queryset = Like.objects.all()
-    serializer_class = LikeSerializer
-    permission_classes = (AllowAny,)
+class AnalyticsAPIView(APIView):
+    def get(self, request):
+        data = Like.objects.extra({'date': 'date(created_at)'}).values('date').annotate(total_likes=Count('id'))
+        if not data:
+            return Response({'status': 'There is no data available for know.'}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(data, status=status.HTTP_200_OK)

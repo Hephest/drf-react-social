@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView, TokenRefreshView,
 )
 
-from .views import PostViewSet, UserCreateAPIView, AnalyticsListAPIView
+from .views import PostViewSet, UserCreateAPIView, AnalyticsAPIView
 
 router = DefaultRouter()
 router.register(r'posts', PostViewSet, basename='posts')
@@ -15,5 +15,5 @@ urlpatterns += [
     url(r'^users/register/', UserCreateAPIView.as_view(), name='users-create'),
     url(r'^token/obtain/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     url(r'^token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    url(r'^analytics/', AnalyticsListAPIView.as_view(), name='analytics')
+    url(r'^analytics/', AnalyticsAPIView.as_view(), name='analytics')
 ]
