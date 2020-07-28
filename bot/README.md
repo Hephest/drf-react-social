@@ -2,8 +2,6 @@
 
 CLI tool for `drf-react-social` project testing purposes.
 
-![GitHub top language](https://img.shields.io/github/languages/top/Hephest/drf-react-social)
-
 ![Automation bot screen](bot.png)
 
 ## Table of Contents

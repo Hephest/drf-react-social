@@ -4,46 +4,76 @@ Social network for posting, based on DRF and React.
 
 [![Build Status](https://travis-ci.org/Hephest/drf-react-social.svg?branch=master)](https://travis-ci.org/Hephest/drf-react-social)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Hephest/drf-react-social)
+[![Updates](https://pyup.io/repos/github/Hephest/drf-react-social/shield.svg)](https://pyup.io/repos/github/Hephest/drf-react-social/)
+[![Python 3](https://pyup.io/repos/github/Hephest/drf-react-social/python-3-shield.svg)](https://pyup.io/repos/github/Hephest/drf-react-social/)
 
-## Testing
+## Table of Contents
 
-Project support `Nose` test runner (`django-nose`) and coverage reports (`coverage`).
+- [Features](#features)
+- [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installing](#installing)
+    - [Development](#development)
+- [To Do](#to-do)
 
-Running tests:
+## Features
 
-    python manage.py test
+- Django 3.0+
+- Django REST Framework 3.11+
+- PostgreSQL 12.3+
+- Fully dockerized, local development via docker-compose
+- CLI automation bot for testing purposes ([see here](bot/README.md))
+
+## Getting Started
+
+### Prerequisites
+
+Project based on Docker containers. As basic prerequisites, you need to get:
+
+- **Docker v.19.03.11-ce** (Linux) or **Docker Machine** (Windows, MacOS)
+- **Docker Compose v.1.26.0**
+
+### Installing
+
+Clone repository to your local machine:
+
+    git clone https://github.com/Hephest/drf-react-social.git
     
-Example report:
+Create and fill `.env` file (example below):
 
-    nosetests --cover-erase --cover-package=blog --verbosity=1
-    Creating test database for alias 'default'...
-    ......................
-    ----------------------------------------------------------------------
-    Ran 22 tests in 7.905s
+```.env
+# Django
+DJANGO_SECRET_KEY = 'h*3-=2ts1zznjts4rl+4ehakk7p3ncdh-jevt3y03h9ze(+3a7'
+
+# PostgreSQL
+DB_NAME = 'postgres'
+DB_USER = 'postgres'
+DB_PASSWORD = 'postgres'
+DB_HOST = 'db'
+DB_PORT = 5432
+```
+
+Run `docker-compose`:
+
+    docker-compose up
+
+### Development
+
+1. Set up virtual environment via provided `requirements.txt` in `backend` directory:
     
-    OK
-    Destroying test database for alias 'default'...
-    Name                              Stmts   Miss  Cover   Missing
-    ---------------------------------------------------------------
-    blog/__init__.py                      0      0   100%
-    blog/admin.py                         1      0   100%
-    blog/apps.py                          3      3     0%   1-5
-    blog/migrations/0001_initial.py       7      0   100%
-    blog/migrations/__init__.py           0      0   100%
-    blog/mixins.py                       21      0   100%
-    blog/models.py                       22      1    95%   26
-    blog/serializers.py                  30      0   100%
-    blog/tests.py                       182      0   100%
-    blog/urls.py                          8      0   100%
-    blog/utils.py                        20      0   100%
-    blog/views.py                        25      0   100%
-    ---------------------------------------------------------------
-    TOTAL                               319      4    99%
+        python -m venv venv/
+        source venv/bin/activate
+        pip install -r backend/requirements.txt
+
+2. Write some code and tests
+3. Run tests via `docker-compose`:
+
+        docker-compose run web python backend/manage.py test blog.tests
 
 ## To do
 
 ### Project
-- [ ] Documentation
+- [x] ~~Documentation~~
 - [ ] `Docker` and `docker-compose` setup
     - [x] ~~backend container~~
     - [ ] `frontend` container
