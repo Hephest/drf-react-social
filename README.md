@@ -22,6 +22,7 @@ Social network for posting, based on DRF and React.
 - Django REST Framework 3.11+
 - PostgreSQL 12.3+
 - Fully dockerized, local development via docker-compose
+- Travis CI integration
 - CLI automation bot for testing purposes ([see here](bot/README.md))
 
 ## Getting Started
