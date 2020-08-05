@@ -1,7 +1,7 @@
 # Base
 Django==3.0.8
 psycopg2-binary==2.8.5
-djangorestframework==3.11.0
+djangorestframework==3.11.1
 django-cors-headers==3.4.0
 djangorestframework-simplejwt==4.4.0
 django-filter==2.3.0
