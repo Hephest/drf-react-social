@@ -4,15 +4,16 @@ from rest_framework import generics, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_tracking.mixins import LoggingMixin
 
 from .mixins import LikedMixin
-from .models import Post, Like
+from .models import Like, Post
 from .serializers import PostSerializer, UserSerializer
 
 User = get_user_model()
 
 
-class PostViewSet(LikedMixin, viewsets.ModelViewSet):
+class PostViewSet(LoggingMixin, LikedMixin, viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, )
@@ -21,7 +22,7 @@ class PostViewSet(LikedMixin, viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 
-class UserCreateAPIView(generics.CreateAPIView):
+class UserCreateAPIView(LoggingMixin, generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny, )
@@ -36,7 +37,7 @@ class UserCreateAPIView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AnalyticsAPIView(APIView):
+class AnalyticsAPIView(LoggingMixin, APIView):
     def get(self, request):
         data = Like.objects.extra({'date': 'date(created_at)'}).values('date').annotate(total_likes=Count('id'))
         if not data:

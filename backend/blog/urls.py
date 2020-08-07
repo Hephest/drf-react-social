@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView, TokenRefreshView,
 )
 
-from .views import PostViewSet, UserCreateAPIView, AnalyticsAPIView
+from .views import AnalyticsAPIView, PostViewSet, UserCreateAPIView
 
 router = DefaultRouter()
 router.register(r'posts', PostViewSet, basename='posts')
