@@ -13,7 +13,7 @@ drf-api-tracking==1.7.5
 # Linting
 flake8==3.8.3
 flake8-django==1.1.1
-isort==5.4.2
+isort==5.6.1
 
 # Testing
 django-nose==1.4.7
