@@ -8,7 +8,7 @@ django-filter==2.4.0
 python-dateutil==2.8.1
 
 # Logging
-drf-api-tracking==1.7.8
+drf-api-tracking==1.8.0
 
 # Linting
 flake8==3.8.4
